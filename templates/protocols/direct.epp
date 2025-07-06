@@ -1,0 +1,23 @@
+<%- | Boolean          $disabled,
+      Boolean          $ipv4,
+      Boolean          $ipv6,
+      Array[String[1]] $interfaces,
+| -%>
+# The direct protocol is not a real routing protocol. It automatically generates
+# direct routes to all network interfaces. Can exist in as many instances as you
+# wish if you want to populate multiple routing tables with direct routes.
+    
+protocol direct {
+<%- if $disabled { -%>
+  disabled;     # disable
+<% } -%>
+<%- if $ipv4 { -%>
+  ipv4;         # Connect to default IPv4 table;
+<% } -%>
+<%- if $ipv6 { -%>
+  ipv6;         # Connect to default IPv6 table;
+<% } -%>
+<% $interfaces.each | String[1] $i | { -%>
+  interface "<%= $i %>";
+<% } -%>
+}

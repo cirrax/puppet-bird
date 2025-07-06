@@ -1,0 +1,46 @@
+<%- | Boolean                       $is_template               = false,
+      Optional[String[1]]           $bgp_name                  = undef,
+      Optional[String[1]]           $template                  = undef,
+      Optional[Bird::Bgp::Neighbor] $neighbor                  = undef,
+      Optional[Bird::Bgp::Local]    $local                     = undef,
+      Optional[String[1]]           $interface                 = undef,
+      Optional[String[1]]           $vrf                       = undef,
+      Optional[Boolean]             $enable_extended_messages  = undef,
+      Optional[Boolean]             $require_extended_messages = undef,
+      Optional[Boolean]             $capabilities              = undef,
+      Optional[Boolean]             $advertise_hostname        = undef,
+      Optional[Boolean]             $require_hostname          = undef,
+      Optional[Boolean]             $disable_after_error       = undef,
+      Hash[String[1],Bird::Channel] $channels                  = {},
+| -%>
+<% if $is_template { %>template bgp<% -%>
+<% } else { %>protocol bgp<% } -%>
+<% if $bgp_name { %> <%= $bgp_name %><% } -%>
+<% if $template { %> from <%= $template %><% } -%>
+{
+<%- if $neighbor {-%>
+  neighbor<% -%>
+  <%- %><%= bird::condprint('', $neighbor['ip']) -%>
+  <%- %><%= bird::condprint(' range', $neighbor['prefix']) -%>
+  <%- %><%= bird::condprint(' port', $neighbor['port']) -%>
+  <%- %><%= bird::condprint(' as', $neighbor['as']) -%>
+  <%- %><%= bird::condprint('', $neighbor['type']) -%>;
+<% } -%>
+<%- if $local {-%>
+  local<% -%>
+  <%- %><%= bird::condprint('', $local['ip']) -%>
+  <%- %><%= bird::condprint(' port', $local['port']) -%>
+  <%- %><%= bird::condprint(' as', $local['as']) -%>;
+<% } -%>
+<%= bird::condprint('  interface', $interface, ";\n", true) -%>
+<%= bird::condprint('  vrf', $vrf, ";\n", true) -%>
+<%= bird::condprint('  enable extended messages', $enable_extended_messages, ";\n") -%>
+<%= bird::condprint('  require extended messages', $require_extended_messages, ";\n") -%>
+<%= bird::condprint('  capabilities', $capabilities, ";\n") -%>
+<%= bird::condprint('  advertise hostname', $advertise_hostname, ";\n") -%>
+<%= bird::condprint('  require hostname', $require_hostname, ";\n") -%>
+<%= bird::condprint('  disable after error', $disable_after_error, ";\n") -%>
+<% $channels.each | String[1] $proto, Bird::Channel $channel | { -%>
+  <%- %><%= epp('bird/channel', { 'proto' => $proto } + $channel ) -%> 
+<% } -%>
+};

@@ -1,0 +1,11 @@
+<%- | Array[String[1]] $comments,
+      Optional[String] $content,
+| -%>
+# managed with puppet, module bird.
+#
+<% $comments.each | String[1] $c | { -%>
+# <%= $c %> 
+<% } %>
+<%- if $content { -%>
+<%= $content -%>
+<% } %>

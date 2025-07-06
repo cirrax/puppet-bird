@@ -1,0 +1,34 @@
+<%- | Optional[String[1]]                        $ospf_name             = undef,
+      Optional[Enum['v2','v3']]                  $version               = undef,
+      Optional[String[1]]                        $vrf                   = undef,
+      Optional[Boolean]                          $rfc1583compat         = undef,
+      Optional[Boolean]                          $rfc5838               = undef,
+      Optional[Boolean]                          $stub_router           = undef,
+      Optional[Integer]                          $tick                  = undef,
+      Optional[Variant[Boolean, String[1]]]      $ecmp                  = undef,
+      Optional[Boolean]                          $merge_external        = undef,
+      Optional[Variant[Boolean, Enum['aware']]]  $graceful_restart      = undef,
+      Optional[Integer]                          $graceful_restart_time = undef,
+      Optional[Hash[String[1],Bird::Ospf::Area]] $areas                 = {},
+      Hash[String[1],Bird::Channel]              $channels              = {},
+| -%>
+protocol ospf<% -%>
+<% if $version { %> <%= $version %><% } -%>
+<% if $ospf_name { %> <%= $ospf_name %><% } -%>
+ {
+<%= bird::condprint('  vrf', $vrf, ";\n", true) -%>
+<%= bird::condprint('  rfc1583compat', $rfc1583compat, ";\n") -%>
+<%= bird::condprint('  rfc5838', $rfc5838, ";\n") -%>
+<%= bird::condprint('  stub_router', $stub_router, ";\n") -%>
+<%= bird::condprint('  tick', $tick, ";\n") -%>
+<%= bird::condprint('  ecmp', $exmp, ";\n") -%>
+<%= bird::condprint('  merge external', $merge_external, ";\n") -%>
+<%= bird::condprint('  graceful restart', $graceful_restart, ";\n") -%>
+<%= bird::condprint('  graceful restart time', $graceful_restart_time, ";\n") -%>
+<% $areas.each | String[1] $area_name, Bird::Ospf::Area $area | { -%>
+  <%- %><%= epp('bird/protocols/ospf_area', { 'area_name' => $area_name } + $area ) -%> 
+<% } -%>
+<% $channels.each | String[1] $proto, Bird::Channel $channel | { -%>
+  <%- %><%= epp('bird/channel', { 'proto' => $proto } + $channel ) -%> 
+<% } -%>
+};

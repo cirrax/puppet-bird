@@ -1,1 +1,11 @@
---- {}
+---
+
+lookup_options:
+  bird::generic_configs:
+    merge: 'hash'
+  bird::config::constants:
+    merge: 'hash'
+  bird::config::generic:
+    merge: 'hash'
+  bird::protocols::bgp::instances: 
+    merge: 'unique'

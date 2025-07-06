@@ -1,0 +1,77 @@
+<% | String[1]                                       $area_name,
+     Optional[Boolean]                               $stub                 = undef,
+     Optional[Boolean]                               $nssa                 = undef,
+     Optional[Boolean]                               $summary              = undef,
+     Optional[Boolean]                               $default_nssa         = undef,
+     Optional[Integer]                               $default_cost         = undef,
+     Optional[Integer]                               $default_cost2        = undef,
+     Optional[Boolean]                               $translator           = undef,
+     Optional[Integer]                               $translator_stability = undef,
+     Optional[Array]                                 $networks             = undef,
+     Optional[Array]                                 $external             = undef,
+     Optional[Hash[String[1],Bird::Ospf::Stubnet]]   $stubnet              = {},
+     Optional[Hash[String[1],Bird::Ospf::Interface]] $interfaces           = {},
+| -%>
+  area <%= $area_name %> {
+  <%- if $stub {-%>
+     stub;
+  <%- } -%>
+  <%- if $nssa {-%>
+     nssa;
+  <%- } -%>
+<%= bird::condprint('    summary', $summary, ";\n") -%>
+<%= bird::condprint('    default nssa', $default_nssa, ";\n") -%>
+<%= bird::condprint('    default cost', $default_cost, ";\n") -%>
+<%= bird::condprint('    default cost2', $default_cost2, ";\n") -%>
+<%= bird::condprint('    translator', $translator, ";\n") -%>
+<%= bird::condprint('    translator stability', $translatos_stibility, ";\n") -%>
+  <%- if $networks {-%>
+    networks {
+    <%- $networks.each | String $n | { -%>
+      <%= $n %>;
+    <%- } -%>
+    };
+  <%- } -%>
+  <%- if $external {-%>
+    external {
+    <%- $external.each | String $e | { -%>
+      <%= $e %>;
+    <%- } -%>
+    };
+  <%- } -%>
+  <%- $stubnet.each | String $s, Bird::Ospf::Stubnet $net | { -%>
+    stubnet <%= $s %> {
+      <%- %><%= bird::condprint('      hidden', $net['hidden'], ";\n") -%>
+      <%- %><%= bird::condprint('      summary', $net['summary'], ";\n") -%>
+      <%- %><%= bird::condprint('      cost', $net['cost'], ";\n") -%>
+    };
+  <%- } -%>
+  <%- $interfaces.each | String $i, Bird::Ospf::Interface $interface | { -%>
+    interface "<%= $i %>" {
+      <%- %><%= bird::condprint('      cost', $interface['cost'], ";\n") -%>
+      <%- %><%= bird::condprint('      stub', $interface['stub'], ";\n") -%>
+      <%- %><%= bird::condprint('      poll', $interface['poll'], ";\n") -%>
+      <%- %><%= bird::condprint('      retransmit', $interface['retransmit'], ";\n") -%>
+      <%- %><%= bird::condprint('      priority', $interface['priority'], ";\n") -%>
+      <%- %><%= bird::condprint('      wait', $interface['wait'], ";\n") -%>
+      <%- %><%= bird::condprint('      dead count', $interface['count'], ";\n") -%>
+      <%- %><%= bird::condprint('      dead', $interface['dead'], ";\n") -%>
+      <%- %><%= bird::condprint('      secondary', $interface['secondary'], ";\n") -%>
+      <%- %><%= bird::condprint('      rx buffer', $interface['rx_buffer'], ";\n") -%>
+      <%- %><%= bird::condprint('      tx lenght', $interface['tx_length'], ";\n") -%>
+      <%- %><%= bird::condprint('      type', $interface['type'], ";\n") -%>
+      <%- %><%= bird::condprint('      link lsa suppression', $interface['link_lsa_suppression'], ";\n") -%>
+      <%- %><%= bird::condprint('      strict nonbroadcast', $interface['strict_nonbroadcast'], ";\n") -%>
+      <%- %><%= bird::condprint('      real broadcast', $interface['real_broadcast'], ";\n") -%>
+      <%- %><%= bird::condprint('      ptp netmask', $interface['ptp_netmask'], ";\n") -%>
+      <%- %><%= bird::condprint('      ptp address', $interface['ptp_address'], ";\n") -%>
+      <%- %><%= bird::condprint('      check link', $interface['check_link'], ";\n") -%>
+      <%- %><%= bird::condprint('      bfd', $interface['bfd'], ";\n") -%>
+      <%- %><%= bird::condprint('      ttl security', $interface['ttl_security'], ";\n") -%>
+      <%- %><%= bird::condprint('      tx', $interface['tx'], ";\n") -%>
+      <%- %><%= bird::condprint('      tx priority', $interface['tx_priority'], ";\n") -%>
+      <%- %><%= bird::condprint('      authentication', $interface['authentication'], ";\n") -%>
+      <%- %><%= bird::condprint('      password', $interface['password'], ";\n", true) -%>
+    };
+  <%- } -%>
+  };

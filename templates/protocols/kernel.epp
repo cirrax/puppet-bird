@@ -1,0 +1,28 @@
+<%- | Enum['ipv4', 'ipv6']                   $proto             = 'ipv4',
+      Optional[String[1]]                    $table             = undef,
+      Optional[Boolean]                      $persist           = undef,
+      Optional[String[1]]                    $import            = undef,
+      Optional[String[1]]                    $export            = undef,
+      Optional[Integer]                      $scan_time         = undef,
+      Optional[Variant[Boolean,Enum['all']]] $learn             = undef,
+      Optional[Variant[Integer,String[1]]]   $kernel_table      = undef,
+      Optional[Integer]                      $metric            = undef,
+      Optional[Boolean]                      $gracefull_restart = undef,
+      Optional[Boolean]                      $merge_paths       = undef,
+      Optional[Integer]                      $netlink_rx_buffer = undef,
+| -%>
+protocol kernel {
+  <%= $proto %> {
+<%= bird::condprint('    import', $import, ";\n") -%>
+<%= bird::condprint('    export', $export, ";\n") -%>
+  };
+<%= bird::condprint('  table', $table, ";\n") -%>
+<%= bird::condprint('  persist', $persist, ";\n") -%>
+<%= bird::condprint('  scan time', $scan_time, ";\n") -%>
+<%= bird::condprint('  learn', $learn, ";\n") -%>
+<%= bird::condprint('  kernel table', $kernel_table, ";\n") -%>
+<%= bird::condprint('  metric', $metric, ";\n") -%>
+<%= bird::condprint('  gracefull restart', $gracefull_restart, ";\n") -%>
+<%= bird::condprint('  merge paths', $merge_paths, ";\n") -%>
+<%= bird::condprint('  netlink rx buffer', $netlink_rx_buffer, ";\n") -%>
+}
