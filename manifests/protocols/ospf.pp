@@ -24,7 +24,7 @@ class bird::protocols::ospf (
   }.each | String[1] $ord | {
     bird::generic { "${ord}_protocol_ospf":
       order    => $ord,
-      filename => "${ord}-protocoll_ospf.conf",
+      filename => "${ord}-protocol_ospf.conf",
       content  => $instances.reduce('') |String $memo, Bird::Ospf::Instance $i | {
         if pick($i['order'],$default_instance_order) == $ord {
           [$memo, epp('bird/protocols/ospf', $i.delete('order'))].join("\n")
