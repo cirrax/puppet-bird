@@ -3,6 +3,10 @@
 lookup_options:
   bird::generic_configs:
     merge: 'hash'
+  bird::functions:
+    merge: 'hash'
+  bird::filters:
+    merge: 'hash'
   bird::config::constants:
     merge: 'hash'
   bird::config::generic:

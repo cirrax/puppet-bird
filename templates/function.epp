@@ -1,0 +1,27 @@
+<%- | String[1]                              $function_name,
+      Variant[String[1],Array[String[1]]]    $comments   = [],
+      Hash[String[1], Bird::Datatypes]       $local_vars = [],
+      Hash[String[1], Bird::Datatypes]       $params     = [],
+      String                                 $content    = '',
+| -%>
+<% if $comments =~ String { %>
+# <%= $comments %>
+<% } else { -%>
+<% $comments.each | String[1] $c | { %>
+# <%= $c %>
+<% } %><% } -%>
+
+function <%= $function_name -%>(
+<%= $params.reduce([]) | Array[String[1]] $m, $i | { $m + ["${i[1]} ${i[0]}"] }.join('; ') -%>
+)<% -%>
+<% if $return { -%>
+-> <%= $return -%>
+<% } -%>
+{
+<% $local_vars.each |String[1] $n, Bird::Datatypes $t | { -%>
+  <%= $t %> <%= $n %>;
+<% } -%>
+
+<%= $content %>
+
+};

@@ -1,0 +1,21 @@
+<%- | String[1]                           $filter_name,
+      Variant[String[1],Array[String[1]]] $comments   = [],
+      Hash[String[1], Bird::Datatypes]    $local_vars = [],
+      String                              $content    = '',
+| -%>
+<% if $comments =~ String { %>
+# <%= $comments %>
+<% } else { -%>
+<% $comments.each | String[1] $c | { %>
+# <%= $c %>
+<% } %><% } -%>
+
+filter <%= $filter_name %>
+{
+<% $local_vars.each |String[1] $n, Bird::Datatypes $t | { -%>
+  <%= $t %> <%= $n %>;
+<% } -%>
+
+<%= $content %>
+
+};
