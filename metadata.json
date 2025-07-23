@@ -29,10 +29,11 @@
   "requirements": [
     {
       "name": "puppet",
-      "version_requirement": ">= 7.24 < 9.0.0"
+      "version_requirement": ">= 7.0.0 < 8.10.0"
+    },
+    {
+      "name": "openvox",
+      "version_requirement": ">= 7.36 < 9.0.0"
     }
-  ],
-  "pdk-version": "3.4.0",
-  "template-url": "https://github.com/puppetlabs/pdk-templates#main",
-  "template-ref": "heads/main-0-ga1e4056"
+  ]
 }
