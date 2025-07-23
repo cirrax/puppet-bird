@@ -31,7 +31,10 @@
 * [`Bird::Channel`](#Bird--Channel): definition of a channel
 * [`Bird::Conf`](#Bird--Conf): Generic config
 * [`Bird::Constant`](#Bird--Constant): a constant defintion
+* [`Bird::Datatypes`](#Bird--Datatypes): List of available datatypes
 * [`Bird::Define::Generic`](#Bird--Define--Generic): parameters for define bird::generic
+* [`Bird::Filter`](#Bird--Filter): Filter definition
+* [`Bird::Function`](#Bird--Function): Function definition
 * [`Bird::Kernel::Instance`](#Bird--Kernel--Instance): Kernel instance definition
 * [`Bird::Ospf::Area`](#Bird--Ospf--Area): ospf area definition
 * [`Bird::Ospf::Instance`](#Bird--Ospf--Instance): bgp instance definition
@@ -59,6 +62,10 @@ The following parameters are available in the `bird` class:
 * [`package_ensure`](#-bird--package_ensure)
 * [`generic_configs`](#-bird--generic_configs)
 * [`incl_protocols`](#-bird--incl_protocols)
+* [`functions`](#-bird--functions)
+* [`default_function_order`](#-bird--default_function_order)
+* [`filters`](#-bird--filters)
+* [`default_filter_order`](#-bird--default_filter_order)
 
 ##### <a name="-bird--config_file"></a>`config_file`
 
@@ -144,6 +151,40 @@ configuration. Includes the classes
 bird::protocols::____
 
 Default value: `['device','direct','kernel']`
+
+##### <a name="-bird--functions"></a>`functions`
+
+Data type: `Hash[String[1], Bird::Function]`
+
+Hash of functions to define
+Remark: this parameter is hash merged
+
+Default value: `{}`
+
+##### <a name="-bird--default_function_order"></a>`default_function_order`
+
+Data type: `String[1]`
+
+the default order for functions if no order is set
+
+Default value: `'20'`
+
+##### <a name="-bird--filters"></a>`filters`
+
+Data type: `Hash[String[1], Bird::Filter]`
+
+Hash of filters to define
+Remark: this parameter is hash merged
+
+Default value: `{}`
+
+##### <a name="-bird--default_filter_order"></a>`default_filter_order`
+
+Data type: `String[1]`
+
+the default order for filters if no order is set
+
+Default value: `'30'`
 
 ### <a name="bird--config"></a>`bird::config`
 
@@ -613,6 +654,12 @@ Variant[String[1], Struct[{
   }]]
 ```
 
+### <a name="Bird--Datatypes"></a>`Bird::Datatypes`
+
+List of available datatypes
+
+Alias of `Enum['bool', 'int', 'pair', 'quad', 'string', 'bytestring', 'ip', 'prefix', 'rd', 'lc', 'enum', 'bgppath', 'bgpmask', 'clist', 'eclist', 'lclist', 'int set', 'pair set', 'quad set', 'ip set', 'prefix set', 'ec set', 'lc set', 'rd set', 'enum set']`
+
 ### <a name="Bird--Define--Generic"></a>`Bird::Define::Generic`
 
 parameters for define bird::generic
@@ -625,6 +672,40 @@ Struct[{
   'order'    => Optional[String[1]],
   'comments' => Optional[Array[String[1]]],
   'content'  => Optional[String[1]],
+}]
+```
+
+### <a name="Bird--Filter"></a>`Bird::Filter`
+
+Filter definition
+
+Alias of
+
+```puppet
+Struct[{
+    'order'       => Optional[String[1]],
+    'filter_name' => Optional[String[1]],
+    'comments'    => Variant[String[1],Array[String[1]]],
+    'local_vars'  => Optional[Hash[String[1], Bird::Datatypes]],
+    'content'     => Optional[String],
+}]
+```
+
+### <a name="Bird--Function"></a>`Bird::Function`
+
+Function definition
+
+Alias of
+
+```puppet
+Struct[{
+    'order'       => Optional[String[1]],
+    'filter_name' => Optional[String[1]],
+    'comments'    => Variant[String[1],Array[String[1]]],
+    'return'      => Optional[Bird::Datatypes],
+    'params'      => Optional[Hash[String[1],Bird::Datatypes]],
+    'local_vars'  => Optional[Hash[String[1], Bird::Datatypes]],
+    'content'     => Optional[String],
 }]
 ```
 
