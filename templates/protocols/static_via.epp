@@ -1,0 +1,18 @@
+<%- | Array[Bird::Static::Via] $via,
+| -%>
+<% $via.each | Bird::Static::Via $v | { -%>
+
+    via<% -%>
+<%- if $v =~ Stdlib::Ip::Address { -%>
+  <%- %> <%= $v -%>
+<%- } elsif $v =~ String[1] { -%>
+  <%- %> "<%= $v %>"<% -%>
+<%- } else { -%>
+  <%- %><%= bird::condprint(' ', $v['ip']) -%>
+  <%- %><%= bird::condprint(' "', $v['direct'], '"') -%>
+  <%- %><%= bird::condprint(' dev "', $v['dev'], '"') -%>
+  <%- %><%= bird::condprint(' weight', $v['weight']) -%>
+  <%- %><%= bird::condprint(' bfd', $v['bfd']) -%>
+  <%- %><%= bird::condprint(' onlink', $v['onlink']) -%>
+<%- } -%>
+<%- } -%>

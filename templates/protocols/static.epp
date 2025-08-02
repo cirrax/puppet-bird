@@ -1,0 +1,25 @@
+<%- | Hash[String[1],Bird::Channel] $channels   = {},
+      Optional[Boolean]                       $check_link = undef,
+      Optional[String[1]]                     $igp_table  = undef,
+      Hash[Stdlib::Ip::Address,Variant[Bird::Static::Route,Array[Bird::Static::Route]]] $route = {},
+| -%>
+protocol static {
+<% $channels.each | String[1] $proto, Bird::Channel $channel | { -%>
+  <%- %><%= epp('bird/channel', { 'proto' => $proto } + $channel ) -%> 
+<% } -%>
+<%= bird::condprint('  check link', $check_link, ";\n") -%>
+<%= bird::condprint('  igp table', $igp_table, ";\n") -%>
+<% $route.each | Stdlib::Ip::Address $to, $route | { -%>
+  <%- if $route['comment'] { -%>
+    <%- %>  # <%= $route['comment'] %>
+  <%- } -%>
+  route <%= $to -%>
+  <%- if $route =~ Array { -%>
+    <%- %><%= epp('bird/protocols/static_route', { 'route' => $route } ) -%>
+  <%- } elsif $route =~ Bird::Static::Sinkroute { -%>
+    <%- %><%= $route -%>
+  <%- } else { -%>
+    <%- %><%= epp('bird/protocols/static_route', { 'route' => [ $route ] }) -%>
+  <%- } -%>
+<% } -%>
+};

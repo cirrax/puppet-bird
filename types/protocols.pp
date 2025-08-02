@@ -5,4 +5,5 @@ type Bird::Protocols = Enum[
   'kernel',
   'bgp',
   'ospf',
+  'static',
 ]

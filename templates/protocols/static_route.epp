@@ -1,0 +1,11 @@
+<%- | Array[Bird::Static::Route] $route,
+| -%>
+<% $route.each | Bird::Static::Route $r | { -%>
+<%= bird::condprint(' max', $r['max']) -%>
+<%= bird::condprint(' as', $r['as']) -%>
+<%- if $r['via'] =~ Array { -%>
+  <%- %><%= epp('bird/protocols/static_via', { 'via' => $r['via'] }) -%>
+<%- } elsif $r['via'] { -%>
+  <%- %><%= epp('bird/protocols/static_via', { 'via' => [ $r['via'] ] }) -%>
+<% } %>;
+<% } -%>
