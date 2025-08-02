@@ -1,8 +1,9 @@
 <%- | Optional[String[1]]            $router_id,
       Optional[String[1]]            $log,
-      Hash[String[1],Bird::Constant] $constants,
-      Hash[String[1],Bird::Conf]     $generic,
       Stdlib::Absolutepath           $includedir,
+      Hash[String[1],Bird::Table]    $tables    = {},
+      Hash[String[1],Bird::Constant] $constants = {},
+      Hash[String[1],Bird::Conf]     $generic   = {} ,
 | -%>
 # managed with puppet, module bird.
 
@@ -13,6 +14,17 @@
 <% if $router_id { -%>
   # Set router ID.
   <%- %>router id <%= $router_id %>;
+<% } -%>
+<% $tables.each | String[1] $n, Bird::Table $t | {  -%>
+  <%- %><%= $t['nettype'] %> table <%= $n -%>
+  <%- %><%= bird::condprint(' debug', $t['debug']) -%>
+  <%- %><%= bird::condprint(' sorted', $t['sorted']) -%>
+  <%- %><%= bird::condprint(' trie', $t['trie']) -%>
+  <%- %><%= bird::condprint(' min settle time', $t['min_settle_time']) -%>
+  <%- %><%= bird::condprint(' max settle time', $t['max_settle_time']) -%>
+  <%- %><%= bird::condprint(' gc threshold', $t['gc_threshold']) -%>
+  <%- %><%= bird::condprint(' gc period', $t['gc_period']) -%>
+  <%- %><%= bird::condprint(' sorted', $t['sorted']) %>;
 <% } -%>
 <% $constants.each | String[1] $key, Bird::Constant $val | {  -%>
   <%- if $val =~ String { -%>

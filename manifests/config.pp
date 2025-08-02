@@ -15,6 +15,7 @@
 class bird::config (
   Optional[String[1]]            $router_id = undef,
   Optional[String[1]]            $log       = undef,
+  Hash[String[1],Bird::Table]    $tables    = {},
   Hash[String[1],Bird::Constant] $constants = {},
   Hash[String[1],Bird::Conf]     $generic   = {},
 ) {
@@ -27,6 +28,7 @@ class bird::config (
     content => epp('bird/config.epp', {
         router_id  => $router_id,
         log        => $log,
+        tables     => $tables,
         constants  => $constants,
         generic    => $generic,
         includedir => $bird::config_dir,
