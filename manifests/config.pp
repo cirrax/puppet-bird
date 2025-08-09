@@ -5,6 +5,8 @@
 #   usually one of IPv4 addresses of the router.
 # @param log
 #   log option
+# @param tables
+#   tables to initialize
 # @param constants
 #   Hash of defined constants
 #   Remark: hiera hash merged

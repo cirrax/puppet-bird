@@ -11,5 +11,5 @@ lookup_options:
     merge: 'hash'
   bird::config::generic:
     merge: 'hash'
-  bird::protocols::bgp::instances: 
+  bird::protocols::bgp::instances:
     merge: 'unique'

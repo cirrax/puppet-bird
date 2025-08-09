@@ -13,6 +13,7 @@
 * [`bird::protocols::direct`](#bird--protocols--direct): add a default direct protocol
 * [`bird::protocols::kernel`](#bird--protocols--kernel): add a default kernel protocol
 * [`bird::protocols::ospf`](#bird--protocols--ospf): add ospf protocols
+* [`bird::protocols::static`](#bird--protocols--static): add static protocols
 * [`bird::service`](#bird--service): ensure the bird service
 
 ### Defined types
@@ -41,6 +42,11 @@
 * [`Bird::Ospf::Interface`](#Bird--Ospf--Interface): ospf area definition
 * [`Bird::Ospf::Stubnet`](#Bird--Ospf--Stubnet): ospf area definition
 * [`Bird::Protocols`](#Bird--Protocols): List of available protocols to include
+* [`Bird::Static::Instance`](#Bird--Static--Instance): static instance definition
+* [`Bird::Static::Route`](#Bird--Static--Route): static route definition
+* [`Bird::Static::Sinkroute`](#Bird--Static--Sinkroute): static sinkroute definition
+* [`Bird::Static::Via`](#Bird--Static--Via): static route definition
+* [`Bird::Table`](#Bird--Table): table config
 
 ## Classes
 
@@ -196,6 +202,7 @@ The following parameters are available in the `bird::config` class:
 
 * [`router_id`](#-bird--config--router_id)
 * [`log`](#-bird--config--log)
+* [`tables`](#-bird--config--tables)
 * [`constants`](#-bird--config--constants)
 * [`generic`](#-bird--config--generic)
 
@@ -215,6 +222,14 @@ Data type: `Optional[String[1]]`
 log option
 
 Default value: `undef`
+
+##### <a name="-bird--config--tables"></a>`tables`
+
+Data type: `Hash[String[1],Bird::Table]`
+
+tables to initialize
+
+Default value: `{}`
 
 ##### <a name="-bird--config--constants"></a>`constants`
 
@@ -407,6 +422,34 @@ the default order for instances if no order is set
 
 Default value: `'50'`
 
+### <a name="bird--protocols--static"></a>`bird::protocols::static`
+
+add static protocols
+
+#### Parameters
+
+The following parameters are available in the `bird::protocols::static` class:
+
+* [`instances`](#-bird--protocols--static--instances)
+* [`default_instance_order`](#-bird--protocols--static--default_instance_order)
+
+##### <a name="-bird--protocols--static--instances"></a>`instances`
+
+Data type: `Array[Bird::Static::Instance]`
+
+static instances to create
+Remark: parameter hiera unique merged
+
+Default value: `[]`
+
+##### <a name="-bird--protocols--static--default_instance_order"></a>`default_instance_order`
+
+Data type: `String[1]`
+
+the default order for instances if no order is set
+
+Default value: `'20'`
+
 ### <a name="bird--service"></a>`bird::service`
 
 ensure the bird service
@@ -543,21 +586,21 @@ Alias of
 
 ```puppet
 Struct[{
-  'order'                     => Optional[String[1]],
-  'channels'                  => Optional[Hash[String[1],Bird::Channel]],
-  'bgp_name'                  => Optional[String[1]],
-  'template'                  => Optional[String[1]],
-  'is_template'               => Optional[Boolean],
-  'neighbor'                  => Optional[Bird::Bgp::Neighbor],
-  'local'                     => Optional[Bird::Bgp::Local],
-  'interface'                 => Optional[String[1]],
-  'vrf'                       => Optional[String[1]],
-  'enable_extended_messages'  => Optional[Boolean],
-  'require_extended_messages' => Optional[Boolean],
-  'capabilities'              => Optional[Boolean],
-  'advertise_hostname'        => Optional[Boolean],
-  'require_hostname'          => Optional[Boolean],
-  'disable_after_error'       => Optional[Boolean],
+    'order'                     => Optional[String[1]],
+    'channels'                  => Optional[Hash[String[1],Bird::Channel]],
+    'bgp_name'                  => Optional[String[1]],
+    'template'                  => Optional[String[1]],
+    'is_template'               => Optional[Boolean],
+    'neighbor'                  => Optional[Bird::Bgp::Neighbor],
+    'local'                     => Optional[Bird::Bgp::Local],
+    'interface'                 => Optional[String[1]],
+    'vrf'                       => Optional[String[1]],
+    'enable_extended_messages'  => Optional[Boolean],
+    'require_extended_messages' => Optional[Boolean],
+    'capabilities'              => Optional[Boolean],
+    'advertise_hostname'        => Optional[Boolean],
+    'require_hostname'          => Optional[Boolean],
+    'disable_after_error'       => Optional[Boolean],
 }]
 ```
 
@@ -569,9 +612,9 @@ Alias of
 
 ```puppet
 Struct[{
-  'ip'     => Optional[String],
-  'port'   => Optional[Integer],
-  'as'     => Optional[Integer],
+    'ip'     => Optional[String],
+    'port'   => Optional[Integer],
+    'as'     => Optional[Integer],
 }]
 ```
 
@@ -583,11 +626,11 @@ Alias of
 
 ```puppet
 Struct[{
-  'ip'     => Optional[String[1]],
-  'prefix' => Optional[String[1]],
-  'port'   => Optional[Integer],
-  'as'     => Optional[Integer],
-  'type'   => Optional[Enum['internal','external']],
+    'ip'     => Optional[String[1]],
+    'prefix' => Optional[String[1]],
+    'port'   => Optional[Integer],
+    'as'     => Optional[Integer],
+    'type'   => Optional[Enum['internal','external']],
 }]
 ```
 
@@ -668,10 +711,10 @@ Alias of
 
 ```puppet
 Struct[{
-  'filename' => Optional[String[1]],
-  'order'    => Optional[String[1]],
-  'comments' => Optional[Array[String[1]]],
-  'content'  => Optional[String[1]],
+    'filename' => Optional[String[1]],
+    'order'    => Optional[String[1]],
+    'comments' => Optional[Array[String[1]]],
+    'content'  => Optional[String[1]],
 }]
 ```
 
@@ -717,17 +760,17 @@ Alias of
 
 ```puppet
 Struct[{
-  'table'             => Optional[String[1]],
-  'import'            => Optional[String[1]],
-  'export'            => Optional[String[1]],
-  'persist'           => Optional[Boolean],
-  'scan_time'         => Optional[Integer],
-  'learn'             => Optional[Variant[Boolean,Enum['all']]],
-  'kernel_table'      => Optional[Variant[Integer,String[1]]],
-  'metric'            => Optional[Integer],
-  'gracefull restart' => Optional[Boolean],
-  'merge_paths'       => Optional[Boolean],
-  'netlink_rx_buffer' => Optional[Integer],
+    'table'             => Optional[String[1]],
+    'import'            => Optional[String[1]],
+    'export'            => Optional[String[1]],
+    'persist'           => Optional[Boolean],
+    'scan_time'         => Optional[Integer],
+    'learn'             => Optional[Variant[Boolean,Enum['all']]],
+    'kernel_table'      => Optional[Variant[Integer,String[1]]],
+    'metric'            => Optional[Integer],
+    'gracefull restart' => Optional[Boolean],
+    'merge_paths'       => Optional[Boolean],
+    'netlink_rx_buffer' => Optional[Integer],
 }]
 ```
 
@@ -739,18 +782,18 @@ Alias of
 
 ```puppet
 Struct[{
-  'stub'                  => Optional[Boolean],
-  'nssa'                  => Optional[Boolean],
-  'summary'               => Optional[Boolean],
-  'default_nssa'          => Optional[Boolean],
-  'default_cost'          => Optional[Integer],
-  'default_cost2'         => Optional[Integer],
-  'translator'            => Optional[Boolean],
-  'translator_stability'  => Optional[Integer],
-  'networks'              => Optional[Array],
-  'external'              => Optional[Array],
-  'stubnet'               => Optional[Hash[String[1],Bird::Ospf::Stubnet]],
-  'interfaces'            => Optional[Hash[String[1],Bird::Ospf::Interface]],
+    'stub'                  => Optional[Boolean],
+    'nssa'                  => Optional[Boolean],
+    'summary'               => Optional[Boolean],
+    'default_nssa'          => Optional[Boolean],
+    'default_cost'          => Optional[Integer],
+    'default_cost2'         => Optional[Integer],
+    'translator'            => Optional[Boolean],
+    'translator_stability'  => Optional[Integer],
+    'networks'              => Optional[Array],
+    'external'              => Optional[Array],
+    'stubnet'               => Optional[Hash[String[1],Bird::Ospf::Stubnet]],
+    'interfaces'            => Optional[Hash[String[1],Bird::Ospf::Interface]],
 }]
 ```
 
@@ -762,20 +805,20 @@ Alias of
 
 ```puppet
 Struct[{
-  'order'                 => Optional[String[1]],
-  'channels'              => Optional[Hash[String[1],Bird::Channel]],
-  'ospf_name'             => Optional[String[1]],
-  'vrf'                   => Optional[String[1]],
-  'version'               => Optional[Enum['v2','v3']],
-  'rfc1583compat'         => Optional[Boolean],
-  'rfc5838'               => Optional[Boolean],
-  'stub_router'           => Optional[Boolean],
-  'tick'                  => Optional[Integer],
-  'ecmp'                  => Optional[Variant[Boolean, String[1]]],
-  'merge_external'        => Optional[Boolean],
-  'graceful_restart'      => Optional[Variant[Boolean, Enum['aware']]],
-  'graceful_restart_time' => Optional[Integer],
-  'areas'                 => Hash[String[1],Bird::Ospf::Area],
+    'order'                 => Optional[String[1]],
+    'channels'              => Optional[Hash[String[1],Bird::Channel]],
+    'ospf_name'             => Optional[String[1]],
+    'vrf'                   => Optional[String[1]],
+    'version'               => Optional[Enum['v2','v3']],
+    'rfc1583compat'         => Optional[Boolean],
+    'rfc5838'               => Optional[Boolean],
+    'stub_router'           => Optional[Boolean],
+    'tick'                  => Optional[Integer],
+    'ecmp'                  => Optional[Variant[Boolean, String[1]]],
+    'merge_external'        => Optional[Boolean],
+    'graceful_restart'      => Optional[Variant[Boolean, Enum['aware']]],
+    'graceful_restart_time' => Optional[Integer],
+    'areas'                 => Hash[String[1],Bird::Ospf::Area],
 }]
 ```
 
@@ -787,35 +830,35 @@ Alias of
 
 ```puppet
 Struct[{
-  'cost'                  => Optional[Integer],
-  'stub'                  => Optional[Boolean],
-  'hello'                 => Optional[Integer],
-  'poll'                  => Optional[Integer],
-  'retransmit'            => Optional[Integer],
-  'priority'              => Optional[Integer],
-  'wait'                  => Optional[Integer],
-  'dead_count'            => Optional[Integer],
-  'dead'                  => Optional[Integer],
-  'secondary'             => Optional[Boolean],
-  'rx_buffer'             => Optional[Variant[Enum['normal','large'],Integer]],
-  'tx_length'             => Optional[Integer],
-  'type'                  => Optional[Enum[
-    'broadcast', 'bcast', 'pointopoint', 'ptp',
-    'nonbroadcast', 'nbma', 'pointomultipoint', 'ptmp'
-  ]],
-  'link_lsa_suppression'  => Optional[Boolean],
-  'strict_nonbroadcast'   => Optional[Boolean],
-  'real_broadcast'        => Optional[Boolean],
-  'ptp_netmask'           => Optional[Boolean],
-  'ptp_address'           => Optional[Boolean],
-  'check_link'            => Optional[Boolean],
-  'bfd'                   => Optional[Boolean],
-  'ttl_security'          => Optional[Variant[Boolean,Enum['tx only']]],
-  'tx'                    => Optional[String[1]],
-  'tx_priority'           => Optional[Integer],
-  'authentication'        => Optional[Enum['none','simple','cryptographic']],
-  'password'              => Optional[String[1]],
-  'neighbors'             => Optional[Array[String[1]]],
+    'cost'                  => Optional[Integer],
+    'stub'                  => Optional[Boolean],
+    'hello'                 => Optional[Integer],
+    'poll'                  => Optional[Integer],
+    'retransmit'            => Optional[Integer],
+    'priority'              => Optional[Integer],
+    'wait'                  => Optional[Integer],
+    'dead_count'            => Optional[Integer],
+    'dead'                  => Optional[Integer],
+    'secondary'             => Optional[Boolean],
+    'rx_buffer'             => Optional[Variant[Enum['normal','large'],Integer]],
+    'tx_length'             => Optional[Integer],
+    'type'                  => Optional[Enum[
+        'broadcast', 'bcast', 'pointopoint', 'ptp',
+        'nonbroadcast', 'nbma', 'pointomultipoint', 'ptmp'
+    ]],
+    'link_lsa_suppression'  => Optional[Boolean],
+    'strict_nonbroadcast'   => Optional[Boolean],
+    'real_broadcast'        => Optional[Boolean],
+    'ptp_netmask'           => Optional[Boolean],
+    'ptp_address'           => Optional[Boolean],
+    'check_link'            => Optional[Boolean],
+    'bfd'                   => Optional[Boolean],
+    'ttl_security'          => Optional[Variant[Boolean,Enum['tx only']]],
+    'tx'                    => Optional[String[1]],
+    'tx_priority'           => Optional[Integer],
+    'authentication'        => Optional[Enum['none','simple','cryptographic']],
+    'password'              => Optional[String[1]],
+    'neighbors'             => Optional[Array[String[1]]],
 }]
 ```
 
@@ -834,5 +877,79 @@ Struct[{
 
 List of available protocols to include
 
-Alias of `Enum['device', 'direct', 'kernel', 'bgp', 'ospf']`
+Alias of `Enum['device', 'direct', 'kernel', 'bgp', 'ospf', 'static']`
+
+### <a name="Bird--Static--Instance"></a>`Bird::Static::Instance`
+
+static instance definition
+
+Alias of
+
+```puppet
+Struct[{
+    'order'                 => Optional[String[1]],
+    'channels'              => Optional[Hash[String[1],Bird::Channel]],
+    'check_link'            => Optional[Boolean],
+    'igp_table'             => Optional[String[1]],
+    'route'                 => Optional[Hash[Stdlib::Ip::Address,Variant[Bird::Static::Sinkroute,Bird::Static::Route,Array[Bird::Static::Route]]]],
+}]
+```
+
+### <a name="Bird--Static--Route"></a>`Bird::Static::Route`
+
+static route definition
+
+Alias of
+
+```puppet
+Struct[{
+    'comment'        => Optional[String[1]],
+    'as'             => Optional[Integer],
+    'max'            => Optional[Integer],
+    'dev'            => Optional[String[1]],
+    'via'            => Optional[Variant[Bird::Static::Via, Array[Bird::Static::Via]]],
+}]
+```
+
+### <a name="Bird--Static--Sinkroute"></a>`Bird::Static::Sinkroute`
+
+static sinkroute definition
+
+Alias of `Enum['unreachable', 'blackhole']`
+
+### <a name="Bird--Static--Via"></a>`Bird::Static::Via`
+
+static route definition
+
+Alias of
+
+```puppet
+Variant[Stdlib::Ip::Address, String[1], Struct[{
+      'ip' => Optional[Stdlib::Ip::Address],
+      'direct' => Optional[String[1]],
+      'dev'    => Optional[String[1]],
+      'weight' => Optional[Integer],
+      'bfd'    => Optional[Boolean],
+      'onlink' => Optional[Boolean],
+}]]
+```
+
+### <a name="Bird--Table"></a>`Bird::Table`
+
+table config
+
+Alias of
+
+```puppet
+Struct[{
+    'nettype'         => Enum['ipv4', 'ipv4 sadr', 'ipv6', 'ipv6 sadr', 'vpn4', 'vpn6', 'roa4', 'roa6', 'flow4', 'flow6', 'mpls'],
+    'debug'           => Optional[Enum['all','off']],
+    'sorted'          => Optional[Boolean],
+    'trie'            => Optional[Boolean],
+    'min_settle_time' => Optional[String[1]],
+    'max_settle_time' => Optional[String[1]],
+    'gc_threshold'    => Optional[Integer],
+    'gc_period'       => Optional[String[1]],
+}]
+```
 
