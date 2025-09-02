@@ -1,7 +1,11 @@
 # Changelog cirrax-bird
 
 
-## Version: 0.1.3 (9 August 2025)
+## Version: 0.1.4 (2 September 2025)
+* fix typo in template (ab82460)
+
+## Version: v0.1.3 (9 August 2025)
+* Release v0.1.3 (aca5634)
 * fix lintians etc (2c8fc1e)
 * switch to our skeleton (f61914e)
 * add static protocol support (66a6f20)
