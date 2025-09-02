@@ -24,7 +24,7 @@
 <%= bird::condprint('    default cost', $default_cost, ";\n") -%>
 <%= bird::condprint('    default cost2', $default_cost2, ";\n") -%>
 <%= bird::condprint('    translator', $translator, ";\n") -%>
-<%= bird::condprint('    translator stability', $translatos_stibility, ";\n") -%>
+<%= bird::condprint('    translator stability', $translator_stability, ";\n") -%>
   <%- if $networks {-%>
     networks {
     <%- $networks.each | String $n | { -%>
