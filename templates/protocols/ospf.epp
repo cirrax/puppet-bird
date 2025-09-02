@@ -21,7 +21,7 @@ protocol ospf<% -%>
 <%= bird::condprint('  rfc5838', $rfc5838, ";\n") -%>
 <%= bird::condprint('  stub_router', $stub_router, ";\n") -%>
 <%= bird::condprint('  tick', $tick, ";\n") -%>
-<%= bird::condprint('  ecmp', $exmp, ";\n") -%>
+<%= bird::condprint('  ecmp', $ecmp, ";\n") -%>
 <%= bird::condprint('  merge external', $merge_external, ";\n") -%>
 <%= bird::condprint('  graceful restart', $graceful_restart, ";\n") -%>
 <%= bird::condprint('  graceful restart time', $graceful_restart_time, ";\n") -%>
