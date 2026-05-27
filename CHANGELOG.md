@@ -1,7 +1,13 @@
 # Changelog cirrax-bird
 
 
-## Version: 1.0.0 (27 May 2026)
+## Version: 1.0.1 (27 May 2026)
+* Merge pull request #1 from cirrax/dev_cirrax (66cb0d0)
+* lint fix idents (9127e25)
+* add github release workflow (5d74411)
+
+## Version: v1.0.0 (27 May 2026)
+* Release v1.0.0 (4438f33)
 * update README (74f6db8)
 
 ## Version: v0.1.5 (2 September 2025)
