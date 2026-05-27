@@ -2,10 +2,17 @@
   "name": "cirrax-bird",
   "version": "1.0.1",
   "author": "cirrax",
-  "summary": "",
+  "summary": "openvox/puppet module for bird2",
   "license": "GPL-3.0-or-later",
-  "source": "",
-  "dependencies": [],
+  "source": "https://github.com/cirrax/puppet-bird",
+  "project_page": "https://github.com/cirrax/puppet-bird",
+  "issues_url": "https://github.com/cirrax/puppet-bird/issues",
+  "dependencies": [
+    {
+      "name": "puppetlabs/stdlib",
+      "version_requirement": ">=3.0.0 < 10.0.0"
+    }
+  ],
   "operatingsystem_support": [
     {
       "operatingsystem": "Debian",
@@ -23,11 +30,17 @@
         "22.04"
       ]
     }
-  ],
+   ],
   "requirements": [
     {
       "name": "openvox",
       "version_requirement": ">= 8.0.0 < 9.0.0"
     }
+  ],
+  "tags": [
+    "bird",
+    "bird2",
+    "ospf",
+    "bgp"
   ]
 }
