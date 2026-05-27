@@ -28,12 +28,12 @@ class bird::config (
     group   => $bird::config_group,
     mode    => $bird::config_dir_mode,
     content => epp('bird/config.epp', {
-        router_id  => $router_id,
-        log        => $log,
-        tables     => $tables,
-        constants  => $constants,
-        generic    => $generic,
-        includedir => $bird::config_dir,
+      router_id  => $router_id,
+      log        => $log,
+      tables     => $tables,
+      constants  => $constants,
+      generic    => $generic,
+      includedir => $bird::config_dir,
     }),
     tag     => 'bird-config',
   }

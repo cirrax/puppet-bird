@@ -20,10 +20,10 @@ class bird::protocols::direct (
   bird::generic { 'protocol_direct':
     order   => '51',
     content => epp('bird/protocols/direct', {
-        'disabled'   => $disabled,
-        'ipv4'       => $ipv4,
-        'ipv6'       => $ipv6,
-        'interfaces' => $interfaces,
+      'disabled'   => $disabled,
+      'ipv4'       => $ipv4,
+      'ipv6'       => $ipv6,
+      'interfaces' => $interfaces,
     }),
   }
 }

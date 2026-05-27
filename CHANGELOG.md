@@ -1,7 +1,11 @@
 # Changelog cirrax-bird
 
 
-## Version: 0.1.5 (2 September 2025)
+## Version: 1.0.0 (27 May 2026)
+* update README (74f6db8)
+
+## Version: v0.1.5 (2 September 2025)
+* Release v0.1.5 (f58d00a)
 * fix typo in template (bcc4031)
 
 ## Version: v0.1.4 (2 September 2025)
