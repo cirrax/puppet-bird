@@ -26,8 +26,8 @@ define bird::generic (
     group   => $bird::config_group,
     mode    => $bird::config_dir_mode,
     content => epp('bird/generic', {
-        comments => $comments,
-        content  => $content,
+      comments => $comments,
+      content  => $content,
     }),
     tag     => 'bird-config',
   }

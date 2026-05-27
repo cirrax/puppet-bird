@@ -2,7 +2,7 @@
 type Bird::Constant = Variant[
   String[1],
   Struct[{
-      'comment' => Optional['comment'],
-      'value'   => String[1],
+    'comment' => Optional['comment'],
+    'value'   => String[1],
   }]
 ]
